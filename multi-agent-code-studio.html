@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agent Code Studio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: #161b22;
+            border-bottom: 1px solid #30363d;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .header-title {
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #3fb950;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Control Panel */
+        .control-panel {
+            background: #0d1117;
+            border-bottom: 1px solid #30363d;
+            padding: 16px;
+            flex-shrink: 0;
+        }
+
+        .prompt-input-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .prompt-input {
+            flex: 1;
+            background: #161b22;
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .prompt-input:focus {
+            outline: none;
+            border-color: #58a6ff;
+        }
+
+        .broadcast-btn {
+            background: #238636;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .broadcast-btn:hover {
+            background: #2ea043;
+        }
+
+        .agent-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .agent-selector {
+            display: flex;
+            gap: 8px;
+        }
+
+        .agent-chip {
+            background: #21262d;
+            border: 1px solid #30363d;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .agent-chip.active {
+            background: #1f6feb;
+            border-color: #1f6feb;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Agent Grid */
+        .agent-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 1px;
+            background: #30363d;
+            padding: 1px;
+        }
+
+        .agent-pane {
+            background: #0d1117;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .agent-header {
+            background: #161b22;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .agent-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .agent-name {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .agent-status {
+            font-size: 12px;
+            color: #8b949e;
+        }
+
+        .agent-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            background: none;
+            border: 1px solid #30363d;
+            color: #8b949e;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            color: #c9d1d9;
+            border-color: #8b949e;
+        }
+
+        .agent-content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .code-editor {
+            flex: 1;
+            background: #0d1117;
+            padding: 16px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow: auto;
+        }
+
+        .code-line {
+            margin: 2px 0;
+            padding: 2px 0;
+        }
+
+        .code-line:hover {
+            background: #161b22;
+        }
+
+        .preview-panel {
+            width: 300px;
+            background: #161b22;
+            border-left: 1px solid #30363d;
+            padding: 16px;
+            overflow: auto;
+        }
+
+        .preview-content {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            color: #24292e;
+            font-size: 14px;
+        }
+
+        /* Success Overlay */
+        .success-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(63, 185, 80, 0.1);
+            border: 2px solid #3fb950;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(2px);
+        }
+
+        .success-overlay.show {
+            display: flex;
+        }
+
+        .success-message {
+            background: #3fb950;
+            color: #0d1117;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: #0d1117;
+            border-left: 1px solid #30363d;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            margin-bottom: 24px;
+        }
+
+        .sidebar-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #c9d1d9;
+        }
+
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 13px;
+        }
+
+        .metric-label {
+            color: #8b949e;
+        }
+
+        .metric-value {
+            color: #c9d1d9;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #21262d;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #3fb950;
+            transition: width 0.3s ease;
+        }
+
+        /* Animations */
+        .typing-indicator {
+            display: inline-block;
+            width: 20px;
+        }
+
+        .typing-indicator::after {
+            content: '...';
+            animation: typing 1.5s infinite;
+        }
+
+        @keyframes typing {
+            0% { content: '.'; }
+            33% { content: '..'; }
+            66% { content: '...'; }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .agent-grid {
+                grid-template-columns: 1fr;
+            }
+            .preview-panel {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-title">
+                <span>Multi-Agent Code Studio</span>
+                <div class="status-indicator"></div>
+                <span style="font-size: 12px; color: #8b949e;">4 agents running</span>
+            </div>
+            <div>
+                <button class="action-btn" onclick="showComparison()">Compare Solutions</button>
+                <button class="action-btn" onclick="deployBest()">Deploy Best</button>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <div class="prompt-input-container">
+                <input type="text" class="prompt-input" placeholder="Enter prompt for all agents..." value="Create a toggle component with smooth animations">
+                <button class="broadcast-btn" onclick="broadcastPrompt()">Broadcast to All</button>
+            </div>
+            <div class="agent-controls">
+                <span style="font-size: 12px; color: #8b949e; margin-right: 12px;">Active Agents:</span>
+                <div class="agent-selector">
+                    <div class="agent-chip active">Claude-1</div>
+                    <div class="agent-chip active">Claude-2</div>
+                    <div class="agent-chip active">GPT-4-1</div>
+                    <div class="agent-chip active">GPT-4-2</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Agent Grid -->
+            <div class="agent-grid">
+                <!-- Agent 1 - Claude-1 -->
+                <div class="agent-pane" id="agent-1">
+                    <div class="agent-header">
+                        <div class="agent-info">
+                            <div class="agent-name">Claude-1</div>
+                            <div class="agent-status">Working<span class="typing-indicator"></span></div>
+                        </div>
+                        <div class="agent-actions">
+                            <button class="action-btn" onclick="commitAgent(1)">Commit</button>
+                            <button class="action-btn" onclick="resetAgent(1)">Reset</button>
+                        </div>
+                    </div>
+                    <div class="agent-content">
+                        <div class="code-editor">
+                            <div class="code-line">import React, { useState } from 'react';</div>
+                            <div class="code-line">import './Toggle.css';</div>
+                            <div class="code-line"></div>
+                            <div class="code-line">export const Toggle = ({ label, onChange }) => {</div>
+                            <div class="code-line">  const [checked, setChecked] = useState(false);</div>
+                            <div class="code-line"></div>
+                            <div class="code-line">  const handleToggle = () => {</div>
+                            <div class="code-line">    setChecked(!checked);</div>
+                            <div class="code-line">    onChange?.(!checked);</div>
+                            <div class="code-line">  };</div>
+                            <div class="code-line"></div>
+                            <div class="code-line">  return (</div>
+                            <div class="code-line">    &lt;label className="toggle-container"&gt;</div>
+                            <div class="code-line">      &lt;input</div>
+                            <div class="code-line">        type="checkbox"</div>
+                            <div class="code-line">        checked={checked}</div>
+                            <div class="code-line">        onChange={handleToggle}</div>
+                            <div class="code-line">      /&gt;</div>
+                            <div class="code-line">      &lt;span className="toggle-slider"&gt;&lt;/span&gt;</div>
+                            <div class="code-line">      {label && &lt;span className="toggle-label"&gt;{label}&lt;/span&gt;}</div>
+                            <div class="code-line">    &lt;/label&gt;</div>
+                            <div class="code-line">  );</div>
+                            <div class="code-line">};</div>
+                        </div>
+                        <div class="preview-panel">
+                            <div class="preview-content">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <label style="position: relative; display: inline-block; width: 48px; height: 24px;">
+                                        <input type="checkbox" style="opacity: 0; width: 0; height: 0;">
+                                        <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px;">
+                                            <span style="position: absolute; content: ''; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;"></span>
+                                        </span>
+                                    </label>
+                                    <span>Toggle Option</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="success-overlay" id="success-1">
+                        <div class="success-message">✓ Solution Working!</div>
+                    </div>
+                </div>
+
+                <!-- Agent 2 - Claude-2 -->
+                <div class="agent-pane" id="agent-2">
+                    <div class="agent-header">
+                        <div class="agent-info">
+                            <div class="agent-name">Claude-2</div>
+                            <div class="agent-status">Testing<span class="typing-indicator"></span></div>
+                        </div>
+                        <div class="agent-actions">
+                            <button class="action-btn" onclick="commitAgent(2)">Commit</button>
+                            <button class="action-btn" onclick="resetAgent(2)">Reset</button>
+                        </div>
+                    </div>
+                    <div class="agent-content">
+                        <div class="code-editor">
+                            <div class="code-line">import React from 'react';</div>
+                            <div class="code-line">import styled from 'styled-components';</div>
+                            <div class="code-line"></div>
+                            <div class="code-line">const ToggleWrapper = styled.div`</div>
+                            <div class="code-line">  display: flex;</div>
+                            <div class="code-line">  align-items: center;</div>
+                            <div class="code-line">  gap: 12px;</div>
+                            <div class="code-line">`;</div>
+                            <div class="code-line"></div>
+                            <div class="code-line">const ToggleSwitch = styled.label`</div>
+                            <div class="code-line">  position: relative;</div>
+                            <div class="code-line">  width: 52px;</div>
+                            <div class="code-line">  height: 28px;</div>
+                            <div class="code-line">  background: ${props => props.checked ? '#10b981' : '#e5e7eb'};</div>
+                            <div class="code-line">  border-radius: 9999px;</div>
+                            <div class="code-line">  cursor: pointer;</div>
+                            <div class="code-line">  transition: background 200ms;</div>
+                            <div class="code-line">`;</div>
+                            <div class="code-line"></div>
+                            <div class="code-line">// Implementation continues...</div>
+                        </div>
+                        <div class="preview-panel">
+                            <div class="preview-content">
+                                <div style="text-align: center; color: #ef4444;">
+                                    ⚠️ Build Error<br>
+                                    <small>styled-components not found</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Agent 3 - GPT-4-1 -->
+                <div class="agent-pane" id="agent-3">
+                    <div class="agent-header">
+                        <div class="agent-info">
+                            <div class="agent-name">GPT-4-1</div>
+                            <div class="agent-status">Analyzing<span class="typing-indicator"></span></div>
+                        </div>
+                        <div class="agent-actions">
+                            <button class="action-btn" onclick="commitAgent(3)">Commit</button>
+                            <button class="action-btn" onclick="resetAgent(3)">Reset</button>
+                        </div>
+                    </div>
+                    <div class="agent-content">
+                        <div class="code-editor">
+                            <div class="code-line">import React, { useState } from 'react';</div>
+                            <div class="code-line"></div>
+                            <div class="code-line">const Toggle = ({ defaultChecked = false, onChange, size = 'medium' }) => {</div>
+                            <div class="code-line">  const [isChecked, setIsChecked] = useState(defaultChecked);</div>
+                            <div class="code-line"></div>
+                            <div class="code-line">  const sizes = {</div>
+                            <div class="code-line">    small: { width: 40, height: 20, thumb: 16 },</div>
+                            <div class="code-line">    medium: { width: 52, height: 28, thumb: 24 },</div>
+                            <div class="code-line">    large: { width: 64, height: 36, thumb: 32 }</div>
+                            <div class="code-line">  };</div>
+                            <div class="code-line"></div>
+                            <div class="code-line">  const currentSize = sizes[size];</div>
+                            <div class="code-line"></div>
+                            <div class="code-line">  const handleChange = () => {</div>
+                            <div class="code-line">    const newValue = !isChecked;</div>
+                            <div class="code-line">    setIsChecked(newValue);</div>
+                            <div class="code-line">    onChange?.(newValue);</div>
+                            <div class="code-line">  };</div>
+                            <div class="code-line"></div>
+                            <div class="code-line">  // Rendering logic...</div>
+                        </div>
+                        <div class="preview-panel">
+                            <div class="preview-content">
+                                <div style="display: flex; flex-direction: column; gap: 12px;">
+                                    <div>Small: [preview]</div>
+                                    <div>Medium: [preview]</div>
+                                    <div>Large: [preview]</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Agent 4 - GPT-4-2 -->
+                <div class="agent-pane" id="agent-4">
+                    <div class="agent-header">
+                        <div class="agent-info">
+                            <div class="agent-name">GPT-4-2</div>
+                            <div class="agent-status">Idle</div>
+                        </div>
+                        <div class="agent-actions">
+                            <button class="action-btn" onclick="commitAgent(4)">Commit</button>
+                            <button class="action-btn" onclick="resetAgent(4)">Reset</button>
+                        </div>
+                    </div>
+                    <div class="agent-content">
+                        <div class="code-editor">
+                            <div class="code-line">// Waiting for task...</div>
+                            <div class="code-line"></div>
+                            <div class="code-line">// Previous approach failed type checking</div>
+                            <div class="code-line">// Retrying with TypeScript implementation</div>
+                        </div>
+                        <div class="preview-panel">
+                            <div class="preview-content">
+                                <div style="text-align: center; color: #8b949e;">
+                                    Awaiting instructions...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Performance Metrics</div>
+                    <div class="metric-item">
+                        <span class="metric-label">Success Rate</span>
+                        <span class="metric-value">25%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 25%;"></div>
+                    </div>
+                    <div class="metric-item" style="margin-top: 12px;">
+                        <span class="metric-label">Avg. Time to Solution</span>
+                        <span class="metric-value">3m 42s</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Total Attempts</span>
+                        <span class="metric-value">4</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Agent Status</div>
+                    <div class="metric-item">
+                        <span class="metric-label">Claude-1</span>
+                        <span class="metric-value" style="color: #3fb950;">✓ Success</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Claude-2</span>
+                        <span class="metric-value" style="color: #f85149;">✗ Failed</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">GPT-4-1</span>
+                        <span class="metric-value" style="color: #f0883e;">⚡ Running</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">GPT-4-2</span>
+                        <span class="metric-value" style="color: #8b949e;">◉ Idle</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Resources</div>
+                    <div class="metric-item">
+                        <span class="metric-label">CPU Usage</span>
+                        <span class="metric-value">42%</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Memory</span>
+                        <span class="metric-value">2.3 GB</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">API Calls</span>
+                        <span class="metric-value">127</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulate agent activity
+        let agentStates = {
+            1: { status: 'working', progress: 75 },
+            2: { status: 'testing', progress: 45 },
+            3: { status: 'analyzing', progress: 30 },
+            4: { status: 'idle', progress: 0 }
+        };
+
+        // Simulate success after some time
+        setTimeout(() => {
+            document.getElementById('success-1').classList.add('show');
+            updateAgentStatus(1, 'Success');
+        }, 5000);
+
+        function broadcastPrompt() {
+            const prompt = document.querySelector('.prompt-input').value;
+            alert(`Broadcasting to all agents: "${prompt}"`);
+            
+            // Simulate agents starting work
+            for (let i = 1; i <= 4; i++) {
+                updateAgentStatus(i, 'Working<span class="typing-indicator"></span>');
+            }
+        }
+
+        function updateAgentStatus(agentId, status) {
+            const statusElement = document.querySelector(`#agent-${agentId} .agent-status`);
+            if (statusElement) {
+                statusElement.innerHTML = status;
+            }
+        }
+
+        function commitAgent(agentId) {
+            alert(`Committing changes from Agent ${agentId}`);
+        }
+
+        function resetAgent(agentId) {
+            alert(`Resetting Agent ${agentId}`);
+        }
+
+        function showComparison() {
+            alert('Opening comparison view...');
+        }
+
+        function deployBest() {
+            alert('Deploying best solution (Claude-1)...');
+        }
+
+        // Simulate real-time code updates
+        setInterval(() => {
+            const codeLines = document.querySelectorAll('.code-line');
+            const randomLine = codeLines[Math.floor(Math.random() * codeLines.length)];
+            randomLine.style.background = '#1f2937';
+            setTimeout(() => {
+                randomLine.style.background = '';
+            }, 500);
+        }, 3000);
+    </script>
+</body>
+</html>
