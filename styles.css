@@ -518,6 +518,20 @@ body {
   .single-agent-view {
     display: flex;
   }
+
+  /* Ensure minimum height for agent content on mobile */
+  .agent-pane {
+    min-height: 60vh;
+  }
+
+  .agent-content {
+    min-height: 400px;
+  }
+
+  .code-editor {
+    min-height: 250px;
+  }
+
   .sidebar {
     border-left: none;
     border-top: 1px solid #30363d;
@@ -530,6 +544,7 @@ body {
 
   .preview-panel {
     max-height: 150px;
+    min-height: 120px;
   }
 
   .code-editor {
