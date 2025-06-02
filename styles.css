@@ -383,6 +383,93 @@ body {
   }
 }
 
+/* Toggle Component Styles */
+.toggle-preview-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toggle-label {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+}
+
+.toggle-checkbox {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.toggle-thumb {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+/* Error and Status Styles */
+.error-message {
+  text-align: center;
+  color: #ef4444;
+}
+
+.awaiting-message {
+  text-align: center;
+  color: #8b949e;
+}
+
+.preview-sizes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Progress Bar Styles */
+.progress-25 {
+  width: 25%;
+}
+
+.metric-item-spaced {
+  margin-top: 12px;
+}
+
+/* Status Colors */
+.status-success {
+  color: #3fb950;
+}
+
+.status-error {
+  color: #f85149;
+}
+
+.status-running {
+  color: #f0883e;
+}
+
+.status-idle {
+  color: #8b949e;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .header {

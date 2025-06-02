@@ -128,45 +128,11 @@
               </div>
               <div class="preview-panel">
                 <div class="preview-content">
-                  <div style="display: flex; align-items: center; gap: 12px">
-                    <label
-                      style="
-                        position: relative;
-                        display: inline-block;
-                        width: 48px;
-                        height: 24px;
-                      "
-                    >
-                      <input
-                        type="checkbox"
-                        style="opacity: 0; width: 0; height: 0"
-                      />
-                      <span
-                        style="
-                          position: absolute;
-                          cursor: pointer;
-                          top: 0;
-                          left: 0;
-                          right: 0;
-                          bottom: 0;
-                          background-color: #ccc;
-                          transition: 0.4s;
-                          border-radius: 34px;
-                        "
-                      >
-                        <span
-                          style="
-                            position: absolute;
-                            content: '';
-                            height: 16px;
-                            width: 16px;
-                            left: 4px;
-                            bottom: 4px;
-                            background-color: white;
-                            transition: 0.4s;
-                            border-radius: 50%;
-                          "
-                        ></span>
+                  <div class="toggle-preview-container">
+                    <label class="toggle-label">
+                      <input type="checkbox" class="toggle-checkbox" />
+                      <span class="toggle-slider">
+                        <span class="toggle-thumb"></span>
                       </span>
                     </label>
                     <span>Toggle Option</span>
@@ -224,7 +190,7 @@
               </div>
               <div class="preview-panel">
                 <div class="preview-content">
-                  <div style="text-align: center; color: #ef4444">
+                  <div class="error-message">
                     ⚠️ Build Error<br />
                     <small>styled-components not found</small>
                   </div>
@@ -285,7 +251,7 @@
               </div>
               <div class="preview-panel">
                 <div class="preview-content">
-                  <div style="display: flex; flex-direction: column; gap: 12px">
+                  <div class="preview-sizes-container">
                     <div>Small: [preview]</div>
                     <div>Medium: [preview]</div>
                     <div>Large: [preview]</div>
@@ -324,9 +290,7 @@
               </div>
               <div class="preview-panel">
                 <div class="preview-content">
-                  <div style="text-align: center; color: #8b949e">
-                    Awaiting instructions...
-                  </div>
+                  <div class="awaiting-message">Awaiting instructions...</div>
                 </div>
               </div>
             </div>
@@ -353,9 +317,9 @@
                 <span class="metric-value">25%</span>
               </div>
               <div class="progress-bar">
-                <div class="progress-fill" style="width: 25%"></div>
+                <div class="progress-fill progress-25"></div>
               </div>
-              <div class="metric-item" style="margin-top: 12px">
+              <div class="metric-item metric-item-spaced">
                 <span class="metric-label">Avg. Time</span>
                 <span class="metric-value">3m 42s</span>
               </div>
@@ -373,25 +337,19 @@
             <div class="sidebar-content">
               <div class="metric-item">
                 <span class="metric-label">Claude-1</span>
-                <span class="metric-value" style="color: #3fb950"
-                  >✓ Success</span
-                >
+                <span class="metric-value status-success">✓ Success</span>
               </div>
               <div class="metric-item">
                 <span class="metric-label">Claude-2</span>
-                <span class="metric-value" style="color: #f85149"
-                  >✗ Failed</span
-                >
+                <span class="metric-value status-error">✗ Failed</span>
               </div>
               <div class="metric-item">
                 <span class="metric-label">GPT-4-1</span>
-                <span class="metric-value" style="color: #f0883e"
-                  >⚡ Running</span
-                >
+                <span class="metric-value status-running">⚡ Running</span>
               </div>
               <div class="metric-item">
                 <span class="metric-label">GPT-4-2</span>
-                <span class="metric-value" style="color: #8b949e">◉ Idle</span>
+                <span class="metric-value status-idle">◉ Idle</span>
               </div>
             </div>
           </div>
