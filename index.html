@@ -10,7 +10,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #0d1117;
@@ -18,32 +17,30 @@
             height: 100vh;
             overflow: hidden;
         }
-
         .app-container {
             display: flex;
             flex-direction: column;
             height: 100vh;
         }
-
+        
         /* Header */
         .header {
             background: #161b22;
             border-bottom: 1px solid #30363d;
-            padding: 12px 20px;
+            padding: 12px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-shrink: 0;
         }
-
         .header-title {
             font-size: 16px;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
+            flex: 1;
         }
-
         .status-indicator {
             width: 8px;
             height: 8px;
@@ -51,13 +48,16 @@
             background: #3fb950;
             animation: pulse 2s infinite;
         }
-
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.5; }
             100% { opacity: 1; }
         }
-
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
         /* Control Panel */
         .control-panel {
             background: #0d1117;
@@ -65,77 +65,112 @@
             padding: 16px;
             flex-shrink: 0;
         }
-
         .prompt-input-container {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             margin-bottom: 16px;
+            flex-wrap: wrap;
         }
-
         .prompt-input {
             flex: 1;
+            min-width: 200px;
             background: #161b22;
             border: 1px solid #30363d;
             color: #c9d1d9;
-            padding: 10px 16px;
+            padding: 12px 16px;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 16px; /* Larger for mobile */
         }
-
         .prompt-input:focus {
             outline: none;
             border-color: #58a6ff;
         }
-
         .broadcast-btn {
             background: #238636;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 20px;
             border-radius: 6px;
             font-weight: 500;
             cursor: pointer;
             transition: background 0.2s;
+            font-size: 14px;
+            min-height: 44px; /* Touch-friendly */
         }
-
         .broadcast-btn:hover {
             background: #2ea043;
         }
-
         .agent-controls {
             display: flex;
             gap: 12px;
             align-items: center;
+            flex-wrap: wrap;
         }
-
+        .agent-controls-label {
+            font-size: 12px;
+            color: #8b949e;
+            white-space: nowrap;
+        }
         .agent-selector {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
         }
-
         .agent-chip {
             background: #21262d;
             border: 1px solid #30363d;
-            padding: 6px 12px;
+            padding: 8px 16px;
             border-radius: 20px;
             font-size: 12px;
             cursor: pointer;
             transition: all 0.2s;
+            min-height: 36px; /* Touch-friendly */
+            display: flex;
+            align-items: center;
         }
-
         .agent-chip.active {
             background: #1f6feb;
             border-color: #1f6feb;
         }
-
+        
         /* Main Content */
         .main-content {
             flex: 1;
             display: flex;
+            flex-direction: column;
             overflow: hidden;
         }
-
-        /* Agent Grid */
+        
+        /* Agent Tabs (Mobile) */
+        .agent-tabs {
+            display: none;
+            background: #161b22;
+            border-bottom: 1px solid #30363d;
+            padding: 0 16px;
+            overflow-x: auto;
+        }
+        .agent-tabs-list {
+            display: flex;
+            gap: 0;
+            min-width: max-content;
+        }
+        .agent-tab {
+            background: none;
+            border: none;
+            color: #8b949e;
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            font-size: 14px;
+            white-space: nowrap;
+            min-height: 44px;
+        }
+        .agent-tab.active {
+            color: #c9d1d9;
+            border-bottom-color: #1f6feb;
+        }
+        
+        /* Agent Grid (Desktop) */
         .agent-grid {
             flex: 1;
             display: grid;
@@ -145,7 +180,14 @@
             background: #30363d;
             padding: 1px;
         }
-
+        
+        /* Single Agent View (Mobile) */
+        .single-agent-view {
+            display: none;
+            flex: 1;
+            overflow: hidden;
+        }
+        
         .agent-pane {
             background: #0d1117;
             display: flex;
@@ -153,7 +195,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .agent-header {
             background: #161b22;
             padding: 12px 16px;
@@ -161,51 +202,50 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid #30363d;
+            flex-wrap: wrap;
+            gap: 8px;
         }
-
         .agent-info {
             display: flex;
             align-items: center;
             gap: 12px;
+            flex: 1;
         }
-
         .agent-name {
             font-weight: 500;
             font-size: 14px;
         }
-
         .agent-status {
             font-size: 12px;
             color: #8b949e;
         }
-
         .agent-actions {
             display: flex;
             gap: 8px;
         }
-
         .action-btn {
             background: none;
             border: 1px solid #30363d;
             color: #8b949e;
-            padding: 4px 8px;
+            padding: 8px 12px;
             border-radius: 4px;
             font-size: 12px;
             cursor: pointer;
             transition: all 0.2s;
+            min-height: 36px; /* Touch-friendly */
         }
-
         .action-btn:hover {
             color: #c9d1d9;
             border-color: #8b949e;
         }
-
         .agent-content {
             flex: 1;
             display: flex;
+            flex-direction: column;
             overflow: hidden;
         }
-
+        
+        /* Code Editor */
         .code-editor {
             flex: 1;
             background: #0d1117;
@@ -215,24 +255,22 @@
             line-height: 1.6;
             overflow: auto;
         }
-
         .code-line {
             margin: 2px 0;
             padding: 2px 0;
         }
-
         .code-line:hover {
             background: #161b22;
         }
-
+        
+        /* Preview Panel */
         .preview-panel {
-            width: 300px;
             background: #161b22;
-            border-left: 1px solid #30363d;
+            border-top: 1px solid #30363d;
             padding: 16px;
+            max-height: 200px;
             overflow: auto;
         }
-
         .preview-content {
             background: white;
             border-radius: 8px;
@@ -240,7 +278,7 @@
             color: #24292e;
             font-size: 14px;
         }
-
+        
         /* Success Overlay */
         .success-overlay {
             position: absolute;
@@ -255,11 +293,9 @@
             justify-content: center;
             backdrop-filter: blur(2px);
         }
-
         .success-overlay.show {
             display: flex;
         }
-
         .success-message {
             background: #3fb950;
             color: #0d1117;
@@ -268,27 +304,37 @@
             font-weight: 600;
             font-size: 14px;
         }
-
+        
         /* Sidebar */
         .sidebar {
-            width: 300px;
             background: #0d1117;
-            border-left: 1px solid #30363d;
+            border-top: 1px solid #30363d;
             padding: 20px;
             overflow-y: auto;
+            max-height: 300px;
         }
-
         .sidebar-section {
             margin-bottom: 24px;
         }
-
         .sidebar-title {
             font-size: 14px;
             font-weight: 600;
             margin-bottom: 12px;
             color: #c9d1d9;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-
+        .collapse-icon {
+            transition: transform 0.2s;
+        }
+        .sidebar-section.collapsed .collapse-icon {
+            transform: rotate(-90deg);
+        }
+        .sidebar-section.collapsed .sidebar-content {
+            display: none;
+        }
         .metric-item {
             display: flex;
             justify-content: space-between;
@@ -296,16 +342,13 @@
             padding: 8px 0;
             font-size: 13px;
         }
-
         .metric-label {
             color: #8b949e;
         }
-
         .metric-value {
             color: #c9d1d9;
             font-weight: 500;
         }
-
         .progress-bar {
             width: 100%;
             height: 4px;
@@ -314,37 +357,139 @@
             overflow: hidden;
             margin-top: 4px;
         }
-
         .progress-fill {
             height: 100%;
             background: #3fb950;
             transition: width 0.3s ease;
         }
-
+        
         /* Animations */
         .typing-indicator {
             display: inline-block;
             width: 20px;
         }
-
         .typing-indicator::after {
             content: '...';
             animation: typing 1.5s infinite;
         }
-
         @keyframes typing {
             0% { content: '.'; }
             33% { content: '..'; }
             66% { content: '...'; }
         }
-
-        /* Responsive */
-        @media (max-width: 1200px) {
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 12px;
+            }
+            .header-title {
+                font-size: 14px;
+                gap: 6px;
+            }
+            .header-title .agent-count {
+                display: none;
+            }
+            .header-actions .action-btn {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+            
+            .control-panel {
+                padding: 12px;
+            }
+            .prompt-input-container {
+                margin-bottom: 12px;
+            }
+            .prompt-input {
+                min-width: 100%;
+                margin-bottom: 8px;
+            }
+            .broadcast-btn {
+                width: 100%;
+            }
+            .agent-controls {
+                gap: 8px;
+            }
+            .agent-controls-label {
+                width: 100%;
+                margin-bottom: 4px;
+            }
+            
+            /* Switch to mobile layout */
             .agent-grid {
-                grid-template-columns: 1fr;
+                display: none;
+            }
+            .agent-tabs {
+                display: block;
+            }
+            .single-agent-view {
+                display: flex;
+            }
+            .sidebar {
+                border-left: none;
+                border-top: 1px solid #30363d;
+                max-height: 250px;
+            }
+            
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .preview-panel {
+                max-height: 150px;
+            }
+            
+            .code-editor {
+                font-size: 12px;
+                padding: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 8px;
+            }
+            .control-panel {
+                padding: 8px;
+            }
+            .agent-chip {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+            .sidebar {
+                padding: 16px;
+                max-height: 200px;
+            }
+            .agent-header {
+                padding: 8px 12px;
+                flex-wrap: wrap;
+            }
+            .agent-actions {
+                width: 100%;
+                justify-content: flex-end;
+                margin-top: 8px;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .sidebar {
+                width: 300px;
+                border-left: 1px solid #30363d;
+                border-top: none;
+                max-height: none;
+            }
+            .main-content {
+                flex-direction: row;
             }
             .preview-panel {
-                display: none;
+                width: 300px;
+                border-left: 1px solid #30363d;
+                border-top: none;
+                max-height: none;
+            }
+            .agent-content {
+                flex-direction: row;
             }
         }
     </style>
@@ -354,16 +499,16 @@
         <!-- Header -->
         <div class="header">
             <div class="header-title">
-                <span>Multi-Agent Code Studio</span>
+                <span>Multi-Agent Studio</span>
                 <div class="status-indicator"></div>
-                <span style="font-size: 12px; color: #8b949e;">4 agents running</span>
+                <span class="agent-count" style="font-size: 12px; color: #8b949e;">4 agents</span>
             </div>
-            <div>
-                <button class="action-btn" onclick="showComparison()">Compare Solutions</button>
-                <button class="action-btn" onclick="deployBest()">Deploy Best</button>
+            <div class="header-actions">
+                <button class="action-btn" onclick="showComparison()">Compare</button>
+                <button class="action-btn" onclick="deployBest()">Deploy</button>
             </div>
         </div>
-
+        
         <!-- Control Panel -->
         <div class="control-panel">
             <div class="prompt-input-container">
@@ -371,19 +516,29 @@
                 <button class="broadcast-btn" onclick="broadcastPrompt()">Broadcast to All</button>
             </div>
             <div class="agent-controls">
-                <span style="font-size: 12px; color: #8b949e; margin-right: 12px;">Active Agents:</span>
+                <div class="agent-controls-label">Active Agents:</div>
                 <div class="agent-selector">
-                    <div class="agent-chip active">Claude-1</div>
-                    <div class="agent-chip active">Claude-2</div>
-                    <div class="agent-chip active">GPT-4-1</div>
-                    <div class="agent-chip active">GPT-4-2</div>
+                    <div class="agent-chip active" onclick="toggleAgent(1)">Claude-1</div>
+                    <div class="agent-chip active" onclick="toggleAgent(2)">Claude-2</div>
+                    <div class="agent-chip active" onclick="toggleAgent(3)">GPT-4-1</div>
+                    <div class="agent-chip active" onclick="toggleAgent(4)">GPT-4-2</div>
                 </div>
             </div>
         </div>
-
+        
+        <!-- Agent Tabs (Mobile) -->
+        <div class="agent-tabs">
+            <div class="agent-tabs-list">
+                <button class="agent-tab active" onclick="switchAgent(1)">Claude-1</button>
+                <button class="agent-tab" onclick="switchAgent(2)">Claude-2</button>
+                <button class="agent-tab" onclick="switchAgent(3)">GPT-4-1</button>
+                <button class="agent-tab" onclick="switchAgent(4)">GPT-4-2</button>
+            </div>
+        </div>
+        
         <!-- Main Content -->
         <div class="main-content">
-            <!-- Agent Grid -->
+            <!-- Desktop: Agent Grid -->
             <div class="agent-grid">
                 <!-- Agent 1 - Claude-1 -->
                 <div class="agent-pane" id="agent-1">
@@ -412,13 +567,9 @@
                             <div class="code-line"></div>
                             <div class="code-line">  return (</div>
                             <div class="code-line">    &lt;label className="toggle-container"&gt;</div>
-                            <div class="code-line">      &lt;input</div>
-                            <div class="code-line">        type="checkbox"</div>
-                            <div class="code-line">        checked={checked}</div>
-                            <div class="code-line">        onChange={handleToggle}</div>
-                            <div class="code-line">      /&gt;</div>
+                            <div class="code-line">      &lt;input type="checkbox" checked={checked} onChange={handleToggle} /&gt;</div>
                             <div class="code-line">      &lt;span className="toggle-slider"&gt;&lt;/span&gt;</div>
-                            <div class="code-line">      {label && &lt;span className="toggle-label"&gt;{label}&lt;/span&gt;}</div>
+                            <div class="code-line">      {label && &lt;span&gt;{label}&lt;/span&gt;}</div>
                             <div class="code-line">    &lt;/label&gt;</div>
                             <div class="code-line">  );</div>
                             <div class="code-line">};</div>
@@ -441,7 +592,7 @@
                         <div class="success-message">✓ Solution Working!</div>
                     </div>
                 </div>
-
+                
                 <!-- Agent 2 - Claude-2 -->
                 <div class="agent-pane" id="agent-2">
                     <div class="agent-header">
@@ -474,8 +625,6 @@
                             <div class="code-line">  cursor: pointer;</div>
                             <div class="code-line">  transition: background 200ms;</div>
                             <div class="code-line">`;</div>
-                            <div class="code-line"></div>
-                            <div class="code-line">// Implementation continues...</div>
                         </div>
                         <div class="preview-panel">
                             <div class="preview-content">
@@ -487,7 +636,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- Agent 3 - GPT-4-1 -->
                 <div class="agent-pane" id="agent-3">
                     <div class="agent-header">
@@ -513,15 +662,11 @@
                             <div class="code-line">    large: { width: 64, height: 36, thumb: 32 }</div>
                             <div class="code-line">  };</div>
                             <div class="code-line"></div>
-                            <div class="code-line">  const currentSize = sizes[size];</div>
-                            <div class="code-line"></div>
                             <div class="code-line">  const handleChange = () => {</div>
                             <div class="code-line">    const newValue = !isChecked;</div>
                             <div class="code-line">    setIsChecked(newValue);</div>
                             <div class="code-line">    onChange?.(newValue);</div>
                             <div class="code-line">  };</div>
-                            <div class="code-line"></div>
-                            <div class="code-line">  // Rendering logic...</div>
                         </div>
                         <div class="preview-panel">
                             <div class="preview-content">
@@ -534,7 +679,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- Agent 4 - GPT-4-2 -->
                 <div class="agent-pane" id="agent-4">
                     <div class="agent-header">
@@ -564,61 +709,81 @@
                     </div>
                 </div>
             </div>
-
+            
+            <!-- Mobile: Single Agent View -->
+            <div class="single-agent-view">
+                <div class="agent-pane" id="mobile-agent">
+                    <!-- Content will be dynamically populated -->
+                </div>
+            </div>
+            
             <!-- Sidebar -->
             <div class="sidebar">
                 <div class="sidebar-section">
-                    <div class="sidebar-title">Performance Metrics</div>
-                    <div class="metric-item">
-                        <span class="metric-label">Success Rate</span>
-                        <span class="metric-value">25%</span>
+                    <div class="sidebar-title" onclick="toggleSection(this)">
+                        Performance Metrics
+                        <span class="collapse-icon">▼</span>
                     </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 25%;"></div>
-                    </div>
-                    <div class="metric-item" style="margin-top: 12px;">
-                        <span class="metric-label">Avg. Time to Solution</span>
-                        <span class="metric-value">3m 42s</span>
-                    </div>
-                    <div class="metric-item">
-                        <span class="metric-label">Total Attempts</span>
-                        <span class="metric-value">4</span>
-                    </div>
-                </div>
-
-                <div class="sidebar-section">
-                    <div class="sidebar-title">Agent Status</div>
-                    <div class="metric-item">
-                        <span class="metric-label">Claude-1</span>
-                        <span class="metric-value" style="color: #3fb950;">✓ Success</span>
-                    </div>
-                    <div class="metric-item">
-                        <span class="metric-label">Claude-2</span>
-                        <span class="metric-value" style="color: #f85149;">✗ Failed</span>
-                    </div>
-                    <div class="metric-item">
-                        <span class="metric-label">GPT-4-1</span>
-                        <span class="metric-value" style="color: #f0883e;">⚡ Running</span>
-                    </div>
-                    <div class="metric-item">
-                        <span class="metric-label">GPT-4-2</span>
-                        <span class="metric-value" style="color: #8b949e;">◉ Idle</span>
+                    <div class="sidebar-content">
+                        <div class="metric-item">
+                            <span class="metric-label">Success Rate</span>
+                            <span class="metric-value">25%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 25%;"></div>
+                        </div>
+                        <div class="metric-item" style="margin-top: 12px;">
+                            <span class="metric-label">Avg. Time</span>
+                            <span class="metric-value">3m 42s</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Total Attempts</span>
+                            <span class="metric-value">4</span>
+                        </div>
                     </div>
                 </div>
-
                 <div class="sidebar-section">
-                    <div class="sidebar-title">Resources</div>
-                    <div class="metric-item">
-                        <span class="metric-label">CPU Usage</span>
-                        <span class="metric-value">42%</span>
+                    <div class="sidebar-title" onclick="toggleSection(this)">
+                        Agent Status
+                        <span class="collapse-icon">▼</span>
                     </div>
-                    <div class="metric-item">
-                        <span class="metric-label">Memory</span>
-                        <span class="metric-value">2.3 GB</span>
+                    <div class="sidebar-content">
+                        <div class="metric-item">
+                            <span class="metric-label">Claude-1</span>
+                            <span class="metric-value" style="color: #3fb950;">✓ Success</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Claude-2</span>
+                            <span class="metric-value" style="color: #f85149;">✗ Failed</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">GPT-4-1</span>
+                            <span class="metric-value" style="color: #f0883e;">⚡ Running</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">GPT-4-2</span>
+                            <span class="metric-value" style="color: #8b949e;">◉ Idle</span>
+                        </div>
                     </div>
-                    <div class="metric-item">
-                        <span class="metric-label">API Calls</span>
-                        <span class="metric-value">127</span>
+                </div>
+                <div class="sidebar-section">
+                    <div class="sidebar-title" onclick="toggleSection(this)">
+                        Resources
+                        <span class="collapse-icon">▼</span>
+                    </div>
+                    <div class="sidebar-content">
+                        <div class="metric-item">
+                            <span class="metric-label">CPU Usage</span>
+                            <span class="metric-value">42%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Memory</span>
+                            <span class="metric-value">2.3 GB</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">API Calls</span>
+                            <span class="metric-value">127</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -626,7 +791,7 @@
     </div>
 
     <script>
-        // Simulate agent activity
+        let currentMobileAgent = 1;
         let agentStates = {
             1: { status: 'working', progress: 75 },
             2: { status: 'testing', progress: 45 },
@@ -634,19 +799,61 @@
             4: { status: 'idle', progress: 0 }
         };
 
-        // Simulate success after some time
-        setTimeout(() => {
-            document.getElementById('success-1').classList.add('show');
-            updateAgentStatus(1, 'Success');
-        }, 5000);
+        // Initialize mobile view
+        function initializeMobileView() {
+            if (window.innerWidth <= 768) {
+                updateMobileAgent();
+            }
+        }
 
+        // Switch agent in mobile view
+        function switchAgent(agentId) {
+            currentMobileAgent = agentId;
+            
+            // Update tab states
+            document.querySelectorAll('.agent-tab').forEach((tab, index) => {
+                tab.classList.toggle('active', index + 1 === agentId);
+            });
+            
+            updateMobileAgent();
+        }
+
+        // Update mobile agent content
+        function updateMobileAgent() {
+            const mobileAgent = document.getElementById('mobile-agent');
+            const sourceAgent = document.getElementById(`agent-${currentMobileAgent}`);
+            
+            if (mobileAgent && sourceAgent) {
+                mobileAgent.innerHTML = sourceAgent.innerHTML;
+            }
+        }
+
+        // Toggle agent chip
+        function toggleAgent(agentId) {
+            const chip = document.querySelector(`.agent-chip:nth-child(${agentId})`);
+            if (chip) {
+                chip.classList.toggle('active');
+            }
+        }
+
+        // Toggle sidebar sections
+        function toggleSection(titleElement) {
+            const section = titleElement.closest('.sidebar-section');
+            section.classList.toggle('collapsed');
+        }
+
+        // Existing functions
         function broadcastPrompt() {
             const prompt = document.querySelector('.prompt-input').value;
-            alert(`Broadcasting to all agents: "${prompt}"`);
             
             // Simulate agents starting work
             for (let i = 1; i <= 4; i++) {
                 updateAgentStatus(i, 'Working<span class="typing-indicator"></span>');
+            }
+            
+            // Update mobile view if on mobile
+            if (window.innerWidth <= 768) {
+                updateMobileAgent();
             }
         }
 
@@ -655,33 +862,59 @@
             if (statusElement) {
                 statusElement.innerHTML = status;
             }
+            
+            // Update mobile view if this is the current agent
+            if (window.innerWidth <= 768 && agentId === currentMobileAgent) {
+                updateMobileAgent();
+            }
         }
 
         function commitAgent(agentId) {
-            alert(`Committing changes from Agent ${agentId}`);
+            console.log(`Committing changes from Agent ${agentId}`);
         }
 
         function resetAgent(agentId) {
-            alert(`Resetting Agent ${agentId}`);
+            console.log(`Resetting Agent ${agentId}`);
         }
 
         function showComparison() {
-            alert('Opening comparison view...');
+            console.log('Opening comparison view...');
         }
 
         function deployBest() {
-            alert('Deploying best solution (Claude-1)...');
+            console.log('Deploying best solution (Claude-1)...');
         }
 
-        // Simulate real-time code updates
+        // Simulate success after some time
+        setTimeout(() => {
+            const successOverlay = document.getElementById('success-1');
+            if (successOverlay) {
+                successOverlay.classList.add('show');
+            }
+            updateAgentStatus(1, 'Success');
+        }, 5000);
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth <= 768) {
+                updateMobileAgent();
+            }
+        });
+
+        // Initialize on load
+        window.addEventListener('load', initializeMobileView);
+
+        // Simulate real-time code updates (reduced frequency for mobile)
         setInterval(() => {
             const codeLines = document.querySelectorAll('.code-line');
-            const randomLine = codeLines[Math.floor(Math.random() * codeLines.length)];
-            randomLine.style.background = '#1f2937';
-            setTimeout(() => {
-                randomLine.style.background = '';
-            }, 500);
-        }, 3000);
+            if (codeLines.length > 0) {
+                const randomLine = codeLines[Math.floor(Math.random() * codeLines.length)];
+                randomLine.style.background = '#1f2937';
+                setTimeout(() => {
+                    randomLine.style.background = '';
+                }, 500);
+            }
+        }, 5000); // Increased interval for better mobile performance
     </script>
 </body>
 </html>
